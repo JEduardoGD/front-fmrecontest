@@ -1,1 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
+
+/*
+<!-- non block rendering : page speed : js = polyfill for old browsers missing `preload` -->
+        <link rel="stylesheet" href="assets/css/core.min.css">
+        <link rel="stylesheet" href="assets/css/vendor_bundle.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;display=swap">
+*/
+/*
+@import "assets/css/core.min.css";
+@import "assets/css/vendor_bundle.min.css";
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;display=swap");
+*/
