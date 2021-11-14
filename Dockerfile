@@ -24,5 +24,7 @@ FROM nginx:latest
 # Copy the build output to replace the default nginx contents.
 COPY --from=build /usr/local/app/dist/fmrecontest-front-v5 /usr/share/nginx/html
 
+COPY default.conf /etc/nginx/conf.d/
+
 # Expose port 80
 EXPOSE 80
