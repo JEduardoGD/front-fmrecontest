@@ -8,7 +8,6 @@ import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './components/header/header.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { BodyComponent } from './components/body/body.component';
 import { FinalscriptsComponent } from './components/finalscripts/finalscripts.component';
 
 @NgModule({
@@ -19,7 +18,6 @@ import { FinalscriptsComponent } from './components/finalscripts/finalscripts.co
     HeaderComponent,
     SidebarComponent,
     FooterComponent,
-    BodyComponent,
     FinalscriptsComponent
   ],
   imports: [
