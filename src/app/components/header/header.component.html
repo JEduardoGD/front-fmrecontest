@@ -269,7 +269,7 @@
 																<i class="fi fi-envelope d-block fs--40"></i>
 																<span class="d-block fs--15">Email</span>
 																<!-- badge -->
-																<span class="badge badge-success fs--10 p-1 m-2 position-absolute end-0 top-0">12</span>
+																<span class="badge badge-success fs--10 p-1 m-2 position-absolute end-0 top-0">22</span>
 															</a>
 														</div>
 
@@ -632,7 +632,7 @@
 								<a href="#" id="dropdownNotificationOptions" class="btn btn-sm rounded-circle btn-light dropdown-toggle" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
 									
 									<!-- badge -->
-									<span class="badge badge-danger fs--10 p--3 mt--n3 position-absolute end-0">2</span>
+									<span class="badge badge-danger fs--10 p--3 mt--n3 position-absolute end-0"></span>
 
 									<span class="group-icon">
 										<i class="fi fi-bell-full"></i>
@@ -1039,7 +1039,7 @@
 								<a href="#" id="dropdownMessageOptions" class="btn btn-sm rounded-circle btn-light dropdown-toggle" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
 									
 									<!-- badge -->
-									<span class="badge badge-danger shadow-danger-md animate-pulse fs--10 p--3 mt--n3 position-absolute end-0">1</span>
+									<span class="badge badge-danger shadow-danger-md animate-pulse fs--10 p--3 mt--n3 position-absolute end-0">7</span>
 
 									<span class="group-icon">
 										<i class="fi fi-envelope-2"></i>
@@ -1225,7 +1225,7 @@
 											.prefix-icon-ignore 					- ignore, do not use on a specific link
 
 								-->
-								<div aria-labelledby="dropdownAccountOptions" class="prefix-link-icon prefix-icon-dot dropdown-menu dropdown-menu-clean dropdown-menu-navbar-autopos dropdown-menu-invert dropdown-click-ignore p-0 mt--18 fs--15 w--300">
+								<div style="background-color: re;" aria-labelledby="dropdownAccountOptions" class="prefix-link-icon prefix-icon-dot dropdown-menu dropdown-menu-clean dropdown-menu-navbar-autopos dropdown-menu-invert dropdown-click-ignore p-0 mt--18 fs--15 w--300">
 									
 									<div class="dropdown-header fs--14 py-4">
 
@@ -1277,8 +1277,8 @@
 
 									<div class="dropdown-divider mb-0"></div>
 
-									<a href="#!" class="prefix-icon-ignore dropdown-footer dropdown-custom-ignore font-weight-medium pt-3 pb-3">
-										<i class="fi fi-power float-start"></i>
+									<a (click)="logout()" class="prefix-icon-ignore dropdown-footer dropdown-custom-ignore font-weight-medium pt-3 pb-3">
+										<em class="fi fi-power float-start"></em>
 										Log Out
 									</a>
 								</div>

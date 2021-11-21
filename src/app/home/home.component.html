@@ -1,1 +1,49 @@
-<p>home works!</p>
+<app-header></app-header>
+<div id="wrapper_content" class="d-flex flex-fill">
+    <app-sidebar></app-sidebar>
+    <!-- MIDDLE -->
+    <div id="middle" class="flex-fill">
+        <!--
+            PAGE TITLE
+        -->
+        <div class="page-title bg-transparent b-0">
+
+            <h1 class="h4 mt-4 mb-0 px-3 font-weight-normal">
+                Dashboard
+            </h1>
+            
+        </div>
+        <!-- Primary -->
+        <section class="rounded mb-3">
+
+
+            <!-- graph header -->
+            <div class="clearfix fs--18 pt-2 pb-3 mb-3 border-bottom">
+
+                <!-- save image -->
+                <a href="#" data-chartjs-id="visitsvsorders" data-file-name="visitsvsorders" class="btn btn-sm btn-light rounded-circle chartjs-save float-end m-0" title="Save Chart" aria-label="Save Chart">
+                    <em class="fi fi-arrow-download m-0"></em>
+                </a>
+                <!-- /save image -->
+
+                Visits &amp; Orders
+                <small class="fs--11 text-muted d-block mt-1">MONTHLY REVENUE OF 2019</small>
+
+            </div>
+            <!-- /graph header -->
+
+
+
+            <div class="row gutters-sm">
+
+                <!-- MAIN GRAPH -->
+                <div class="col-12 col-lg-7 col-xl-9 mb-5">
+
+                    <div class="position-relative min-h-250 max-h-500 max-h-300-xs h-100"></div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<app-footer></app-footer>
+<app-finalscripts></app-finalscripts>
