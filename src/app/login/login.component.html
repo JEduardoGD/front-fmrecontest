@@ -1,7 +1,59 @@
-<app-header></app-header>
 <div id="wrapper_content" class="d-flex flex-fill">
-    <app-sidebar></app-sidebar>
-    <app-body></app-body>
+				<!-- MIDDLE -->
+				<div id="middle" class="flex-fill">
+
+					<!-- doc:start -->
+					<div class="page-title bg-transparent b-0">
+
+						<h1 class="h4 mt-4 mb-0 px-3 font-weight-normal">
+							Login
+						</h1>
+
+					</div>
+
+
+					<!-- counter:start: -->
+					<div class="row gutters-sm">
+
+						<!-- start:col: -->
+						<div class="col-12 col-xl-12 mb-12">
+
+							<!-- start:portlet -->
+							<div class="portlet">
+								<div class="portlet-body">
+									<div class="container py-6">
+
+										<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+										  <div class="form-group">
+										    <label for="exampleInputEmail1">Email address</label>
+										    <input type="email" formControlName="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+										    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+										  </div>
+										  <div class="form-group">
+										    <label for="exampleInputPassword1">Password</label>
+										    <input type="password" formControlName="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+										  </div>
+										  <div class="form-group form-check">
+										    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+										    <label class="form-check-label" for="exampleCheck1">Check me out</label>
+										  </div>
+										  <button class="btn btn-primary">Submit</button>
+										</form>
+											
+
+									</div>
+								</div>
+
+							</div>
+							<!-- end:portlet -->
+
+						</div>
+						<!-- end:col: -->
+					</div>
+					<!-- end:row: -->
+					<!-- doc:end -->
+
+				</div>
+				<!-- /MIDDLE -->
 </div>
-<app-footer></app-footer>
 <app-finalscripts></app-finalscripts>
