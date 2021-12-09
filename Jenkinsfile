@@ -1,51 +1,74 @@
 pipeline{
-
-	agent any
+  agent any
 
 	environment {
 		DOCKERHUB_CREDENTIALS=credentials('dockerhub-xe1jeg')
     BRANCH_NAME = "${GIT_BRANCH.split("/")[1]}"
 	}
-
+  
 	stages {
-    
 		stage('Login') {
-      notifyBuild('STARTED')
-      try {
         steps {
-          sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+          notifyBuild('STARTED')
+          script {
+            try {
+              sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+            } catch (e) {
+              // If there was an exception thrown, the build failed
+              currentBuild.result = "FAILED"
+              throw e
+            }
+          }
         }
-      } catch (e) {
-        // If there was an exception thrown, the build failed
-        currentBuild.result = "FAILED"
-        throw e
-      } finally {
-      // Success or failure, always send notifications
-      notifyBuild(currentBuild.result)
-      }
 		}
 
 		stage('Build') {
-      try {
 			steps {
-				sh 'docker build -t xe1jeg/fmrecontest-front-v5:${BRANCH_NAME} .'
-			}
-		}
+          script {
+            try {
+				      sh 'docker build -t xe1jeg/fmrecontest-front-v5:${BRANCH_NAME} .'
+            } catch (e) {
+              // If there was an exception thrown, the build failed
+              currentBuild.result = "FAILED"
+              throw e
+            } 
+          }
+      }
+    }
 
 		stage('Push') {
 			steps {
-				sh 'docker push xe1jeg/fmrecontest-front-v5:${BRANCH_NAME}'
+        script {
+          try {
+            sh 'docker push xe1jeg/fmrecontest-front-v5:${BRANCH_NAME}'
+          } catch (e) {
+            // If there was an exception thrown, the build failed
+            currentBuild.result = "FAILED"
+            throw e
+          } 
+        }
 			}
 		}
 	}
+  
 
 	post {
 		always {
-			sh 'docker logout'
-		}
-	}
+      script {
+        try {
+          sh 'docker logout'
+        } catch (e) {
+          // If there was an exception thrown, the build failed
+          currentBuild.result = "FAILED"
+          throw e
+        } finally {
+          // Success or failure, always send notifications
+          notifyBuild(currentBuild.result)
+        }
+      }
+    }
+  }
 }
-
 
 def notifyBuild(String buildStatus = 'STARTED') {
   // build status of null means successful
@@ -76,9 +99,15 @@ def notifyBuild(String buildStatus = 'STARTED') {
 
   //hipchatSend (color: color, notify: true, message: summary)
 
-  emailext (
-      subject: subject,
-      body: details,
-      recipientProviders: [[$class: 'DevelopersRecipientProvider']]
-    )
+  def mailRecipients = "eduardo_gd@hotmail.com"
+  def jobName = currentBuild.fullDisplayName
+
+    emailext body: '''${SCRIPT, template="groovy-html.template"}''',
+        mimeType: 'text/html',
+        subject: "[Jenkins] ${subject}",
+        to: "${mailRecipients}",
+        from: 'xe1jeg@gmail.com',
+        fromName: 'Jenkins Serpiente Digital',
+        replyTo: "${mailRecipients}",
+        recipientProviders: [[$class: 'CulpritsRecipientProvider']]
 }
