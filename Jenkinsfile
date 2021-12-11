@@ -1,32 +1,41 @@
-pipeline{
-  agent any
+def nonprodDeployServer = [:]
+    nonprodDeployServer.name = 'NONPROD DEPLOY SERVER'
+    nonprodDeployServer.host = "${env.NONPROD_DEPLOY_SERVER}"
+    nonprodDeployServer.allowAnyHosts = true
 
+withCredentials([usernamePassword(credentialsId: 'NONPROD_DEPLOY_SERVER_CRED', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+  nonprodDeployServer.user = USERNAME
+  nonprodDeployServer.password = PASSWORD
+}
+
+
+def prodDeployServer = [:]
+    prodDeployServer.name = 'PROD DEPLOY SERVER'
+    prodDeployServer.host = "${env.PROD_DEPLOY_SERVER}"
+    prodDeployServer.allowAnyHosts = true
+
+withCredentials([usernamePassword(credentialsId: 'PROD_DEPLOY_SERVER_CRED', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+  prodDeployServer.user = USERNAME
+  prodDeployServer.password = PASSWORD
+}
+
+pipeline{
+  
+  agent any
+  
 	environment {
 		DOCKERHUB_CREDENTIALS=credentials('dockerhub-xe1jeg')
     BRANCH_NAME = "${GIT_BRANCH.split("/")[1]}"
+    DEPLOY_SERVER="${BRANCH_NAME}_DEPLOY_SERVER"
 	}
   
 	stages {
-		stage('Login') {
-        steps {
-          notifyBuild('STARTED')
-          script {
-            try {
-              sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-            } catch (e) {
-              // If there was an exception thrown, the build failed
-              currentBuild.result = "FAILED"
-              throw e
-            }
-          }
-        }
-		}
-
 		stage('Build') {
 			steps {
           script {
             try {
 				      sh 'docker build -t xe1jeg/fmrecontest-front-v5:${BRANCH_NAME} .'
+              sh 'echo "hello"'
             } catch (e) {
               // If there was an exception thrown, the build failed
               currentBuild.result = "FAILED"
@@ -35,6 +44,22 @@ pipeline{
           }
       }
     }
+    
+		stage('Login') {
+        steps {
+          notifyBuild('STARTED')
+          script {
+            try {
+              sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+              sh 'echo $DEPLOY_SERVER'
+            } catch (e) {
+              // If there was an exception thrown, the build failed
+              currentBuild.result = "FAILED"
+              throw e
+            }
+          }
+        }
+		}
 
 		stage('Push') {
 			steps {
@@ -49,6 +74,25 @@ pipeline{
         }
 			}
 		}
+    
+    stage('Remote SSH') {
+      steps {
+        script {
+          if (BRANCH_NAME == 'master') {
+            withCredentials([usernamePassword(credentialsId: 'PROD_DEPLOY_SERVER_CRED', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+              sshCommand remote: prodDeployServer, command: "cd ."
+              sshCommand remote: prodDeployServer, command: "cd ws/deploy/${BRANCH_NAME} && ./deploy.sh"
+           }
+          } else {
+            withCredentials([usernamePassword(credentialsId: 'NONPROD_DEPLOY_SERVER_CRED', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+              sshCommand remote: nonprodDeployServer, command: "cd ."
+              sshCommand remote: nonprodDeployServer, command: "cd ws/deploy/${BRANCH_NAME} && ./deploy.sh"
+           }
+          }
+        }
+      }
+    }
+    
 	}
   
 
@@ -107,7 +151,6 @@ def notifyBuild(String buildStatus = 'STARTED') {
         subject: "[Jenkins] ${subject}",
         to: "${mailRecipients}",
         from: 'xe1jeg@gmail.com',
-        fromName: 'Jenkins Serpiente Digital',
         replyTo: "${mailRecipients}",
         recipientProviders: [[$class: 'CulpritsRecipientProvider']]
 }
